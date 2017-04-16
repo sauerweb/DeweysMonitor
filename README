@@ -1,8 +1,5 @@
 Dewey's Pizza is my favorite pizza place. They have special seasonal items that change every month or two.
 This small app will monitor Dewey's website and send out tweet when the seasonal pizza changes.
 
-
-Task List
-
-0. Testing
-1. Update for salad specials too?
+Uses Scrapy for webscraping (https://scrapy.org)
+Uses Tweepy for tweeting (http://www.tweepy.org)
