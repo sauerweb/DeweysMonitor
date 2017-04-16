@@ -2,6 +2,7 @@ import contextlib
 import json
 import os
 import scrapy
+import shutil
 import tweepy
 
 from scrapy.crawler import CrawlerProcess
@@ -35,6 +36,11 @@ process = CrawlerProcess(
 process.crawl(SeasonalSpider)
 process.start()
 
+# extract the scraped previous seasonal specials
+with open('output\\previous_seasonals.json') as json_file:
+   data = json.load(json_file)
+   previous_name = data[0]['name'][0]
+
 # extract the scraped current seasonal specials
 with open('output\\current_seasonals.json') as json_file:
    data = json.load(json_file)
@@ -44,11 +50,14 @@ with open('output\\current_seasonals.json') as json_file:
 # strip escape code \u00a0 at end
 current_description = current_description[:-2]
 
-# send tweet
-auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
-auth.set_access_token(access_token, access_token_secret)
-api = tweepy.API(auth)
+if previous_name != current_name:
+   # setup & send tweet
+   auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
+   auth.set_access_token(access_token, access_token_secret)
+   api = tweepy.API(auth)
 
-# write test tweet
-tweet = 'Current special:\n\n' + current_name + ' Pizza' + ' with ' + current_description
-api.update_status(status=tweet)
+   tweet = 'Current special:\n\n' + current_name + ' Pizza' + ' with ' + current_description
+   api.update_status(status=tweet)
+
+   # copy the current specials over to the previous specials
+   shutil.copyfile('output\\current_seasonals.json', 'output\\previous_seasonals.json')
