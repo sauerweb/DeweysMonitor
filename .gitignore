@@ -1,0 +1,8 @@
+## Ignore __pycache__, private_credentials (contains twitter credentials, access keys, etc)
+
+# User-specific files
+private_credentials.py
+
+# Build results
+__pycache__
+

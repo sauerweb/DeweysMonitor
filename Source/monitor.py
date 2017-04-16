@@ -2,13 +2,17 @@ import contextlib
 import json
 import os
 import scrapy
+import tweepy
+
 from scrapy.crawler import CrawlerProcess
+from private_credentials import *
 
-# start by removing current_seasonals.json (scrapy will append to it)
+
+#  remove current_seasonals.json if it exists (otherwise scrapy will append to it)
 with contextlib.suppress(FileNotFoundError):
-   os.remove('current_seasonals.json')
+   os.remove('output\\current_seasonals.json')
 
-# Spider Definition
+# Spider Definition for scraping Dewey's Pizza's website
 class SeasonalSpider(scrapy.Spider):
    name = 'seasonals'
    start_urls = ['http://deweyspizza.com/menu/from-the-kitchen/']
@@ -24,14 +28,15 @@ process = CrawlerProcess(
 {
    'USER_AGENT'   : 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1)',
    'FEED_FORMAT'  : 'json',
-   'FEED_URI'     : "current_seasonals.json"
+   'FEED_URI'     : "output\\current_seasonals.json"
 })
 
+# Start scraping
 process.crawl(SeasonalSpider)
 process.start()
 
-# print the current seasonal specials
-with open('current_seasonals.json') as json_file:
+# extract the scraped current seasonal specials
+with open('output\\current_seasonals.json') as json_file:
    data = json.load(json_file)
    current_name = data[0]['name'][0]
    current_description = data[0]['descr'][0]
@@ -39,5 +44,11 @@ with open('current_seasonals.json') as json_file:
 # strip escape code \u00a0 at end
 current_description = current_description[:-2]
 
-print(current_name)
-print(current_description)
+# send tweet
+auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
+auth.set_access_token(access_token, access_token_secret)
+api = tweepy.API(auth)
+
+# write test tweet
+tweet = 'Current special:\n\n' + current_name + ' Pizza' + ' with ' + current_description
+api.update_status(status=tweet)

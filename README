@@ -1,10 +1,11 @@
 Dewey's Pizza is my favorite pizza place. They have special seasonal items that change every month or two.
-This little application will monitor Dewey's website and send out a notification when the seasonal items change.
+This small app will monitor Dewey's website and send out a notification when the seasonal items change.
 
 
 Task List
 
-1. Scrape Dewey's website (python, scrapy?)
-2. Notify user (twitter?)
-3. Possible improvements?
+2. Only notify user if specials change
+3. Run via scheduled task
+4. Update for salad specials too?
+
 
