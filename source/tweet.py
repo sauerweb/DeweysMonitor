@@ -7,4 +7,5 @@ def send(text):
    auth.set_access_token(private_credentials.access_token, private_credentials.access_token_secret)
    api = tweepy.API(auth)
 
+   text = text[:140]
    api.update_status(status=text)
