@@ -14,8 +14,8 @@ class SeasonalSpider(scrapy.Spider):
    def parse(self, response):
       yield \
       {
-         'name'  : response.css('#post-72 .h-recent-posts::text').extract(),
-         'descr' : response.css('#post-72 .x-recent-posts-content .x-recent-posts-content::text').extract(),
+         'name'  : response.css('#post-1549 .h-recent-posts::text').extract(),
+         'descr' : response.css('#post-1549 .s1::text').extract(),
       }
 
 def start():
